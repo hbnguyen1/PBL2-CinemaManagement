@@ -65,50 +65,63 @@ void ManageShowtime::display() {
         cout << "Khong co suat chieu nao!\n";
         return;
     }
+
     sort(list, list + n, cmp);
     Logger::getInstance().info("Hien thi danh sach suat chieu hien tai");
-    const int STT_WIDTH = 5;     
-    const int MASUAT_WIDTH = 13;
-    const int IDFILM_WIDTH = 13;  
-    const int MAPHONG_WIDTH = 13; 
-    const int NGAY_WIDTH = 20;    
-    const int GIO_WIDTH = 13;   
-    const int GIA_WIDTH = 17;     
-    int totalWidth = STT_WIDTH + MASUAT_WIDTH + IDFILM_WIDTH + MAPHONG_WIDTH + NGAY_WIDTH + GIO_WIDTH + GIA_WIDTH + 1; 
+
+    const int STT_WIDTH      = 5;
+    const int MASUAT_WIDTH   = 9;
+    const int MAPHIM_WIDTH   = 10;
+    const int TENPHIM_WIDTH  = 28;
+    const int MAPHONG_WIDTH  = 11;
+    const int NGAY_WIDTH     = 12;
+    const int GIO_WIDTH      = 8;
+    const int GIA_WIDTH      = 10;
+
+    int totalWidth = STT_WIDTH + MASUAT_WIDTH + MAPHIM_WIDTH + TENPHIM_WIDTH
+                   + MAPHONG_WIDTH + NGAY_WIDTH + GIO_WIDTH + GIA_WIDTH + 1;
+
     cout << "\n" << string(totalWidth, '=') << endl;
     cout << "                                DANH SACH SUAT CHIEU HIEN TAI\n";
-    cout << string(totalWidth, '=') << endl; 
-    cout << "|" << left 
+    cout << string(totalWidth, '=') << endl;
+
+    cout << "|" << left
          << setw(STT_WIDTH - 1) << "STT" << "|"
          << setw(MASUAT_WIDTH - 1) << "MA SUAT" << "|"
-         << setw(IDFILM_WIDTH - 1) << "MA PHIM" << "|"
+         << setw(MAPHIM_WIDTH - 1) << "MA PHIM" << "|"
+         << setw(TENPHIM_WIDTH - 1) << "TEN PHIM" << "|"
          << setw(MAPHONG_WIDTH - 1) << "MA PHONG" << "|"
          << setw(NGAY_WIDTH - 1) << "NGAY" << "|"
          << setw(GIO_WIDTH - 1) << "GIO" << "|"
          << setw(GIA_WIDTH - 1) << "GIA (VND)" << "|"
          << endl;
-         
-    cout << string(totalWidth, '=') << endl; 
+
+    cout << string(totalWidth, '=') << endl;
+
     int stt = 1;
     for (int i = 0; i < n; i++) {
-    if (ManageShowtime::isPastDateTime(list[i].getDate(), list[i].getTime())) {
-        continue;
+        if (ManageShowtime::isPastDateTime(list[i].getDate(), list[i].getTime())) {
+            continue;
+        }
+
+        cout << "|" << left
+             << setw(STT_WIDTH - 1) << stt++ << "|"
+             << setw(MASUAT_WIDTH - 1) << list[i].getShowID() << "|"
+             << setw(MAPHIM_WIDTH - 1) << list[i].getFilm()->getIDfilm() << "|"
+             << setw(TENPHIM_WIDTH - 1) << list[i].getFilm()->getNamefilm() << "|"
+             << setw(MAPHONG_WIDTH - 1) << list[i].getRoom()->getRoomID() << "|"
+             << setw(NGAY_WIDTH - 1) << list[i].getDate() << "|"
+             << setw(GIO_WIDTH - 1) << list[i].getTime() << "|"
+             << right << setw(GIA_WIDTH - 1)
+             << fixed << setprecision(0) << list[i].getPrice()
+             << left << "|"
+             << endl;
     }
-    cout << "|" << left 
-         << setw(STT_WIDTH - 1) << stt++ << "|"
-         << setw(MASUAT_WIDTH - 1) << list[i].getShowID() << "|"
-         << setw(IDFILM_WIDTH - 1) << list[i].getFilm()->getIDfilm() << "|"
-         << setw(MAPHONG_WIDTH - 1) << list[i].getRoom()->getRoomID() << "|"
-         << setw(NGAY_WIDTH - 1) << list[i].getDate() << "|"
-         << setw(GIO_WIDTH - 1) << list[i].getTime() << "|"
-         << right << setw(GIA_WIDTH - 1) 
-         << fixed << setprecision(0) << list[i].getPrice() 
-         << left << "|" 
-         << endl;
-    }
+
     if (stt == 1) {
-    cout << "Khong co suat chieu hop le (tat ca deu da chieu xong)!\n";
+        cout << "Khong co suat chieu hop le (tat ca deu da chieu xong)!\n";
     }
+
     cout << string(totalWidth, '=') << endl;
 }
 
@@ -198,6 +211,9 @@ void ManageShowtime::addShowtime(ManageFilm& MF, ManageRoom& MR){
             cout << "Loi: Khong tim thay ma phim " << ma << ".\n";
             Logger::getInstance().error("Khong tim thay ma phim: " + ma);
             return;
+        }
+        while(findFilm(ma)){
+            break;
         }
         cout << "Nhap ngay chieu (DD-MM-YYYY): ";
         cin >> day;

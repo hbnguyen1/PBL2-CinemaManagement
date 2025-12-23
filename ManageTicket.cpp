@@ -428,7 +428,9 @@ void ManageTicket::display(Customer *c){
     Logger::getInstance().info("Hien thi danh sach thong tin hoa don");
 
     cout << "\n" << string(totalWidth, '=') << endl;
-    cout << setw((totalWidth + 30) / 2) << "DANH SACH THONG TIN HOA DON" << "\n";
+    string title = "DANH SACH THONG TIN HOA DON";
+    int padding = (totalWidth - title.length()) / 2;
+    cout << string(padding, ' ') << title << endl;
     cout << string(totalWidth, '=') << endl;
 
     cout << "|" << left
@@ -446,22 +448,26 @@ void ManageTicket::display(Customer *c){
 
     int stt = 1;
     for (int i = 0; i < n; i++) {
-        if (c->getid() == list[i].getCustomer()->getid()) {
-            double totalPayment = list[i].getShowtime()->getPrice() * list[i].getcount();
-            string dateTime = list[i].getShowtime()->getDate() + " " + list[i].getShowtime()->getTime();
+        if (c->getid() == list[i].getCustomer()->getid()){
+            string day = list[i].getShowtime()->getDate();
+            string time = list[i].getShowtime()->getTime();
+            if (!ManageShowtime::isPastDateTime(day, time)){
+                double totalPayment = list[i].getShowtime()->getPrice() * list[i].getcount();
+                string dateTime = list[i].getShowtime()->getDate() + " " + list[i].getShowtime()->getTime();
 
-            cout << "|" << left
-                 << setw(STT_WIDTH) << stt << "|"
-                 << setw(MAVE_WIDTH) << list[i].getTicketID() << "|"
-                 << setw(MASUAT_WIDTH) << list[i].getShowtime()->getShowID() << "|"
-                 << setw(IDFILM_WIDTH) << list[i].getShowtime()->getFilm()->getIDfilm() << "|"
-                 << setw(MAPHONG_WIDTH) << list[i].getShowtime()->getRoom()->getRoomID() << "|"
-                 << setw(CHAIRCOUNT_WIDTH) << list[i].getcount() << "|"
-                 << setw(NGAYGIO_WIDTH) << dateTime << "|"
-                 << right << setw(GIA_WIDTH) << fixed << setprecision(0) << totalPayment << left << "|"
-                 << endl;
-            ++stt;
-        }
+                cout << "|" << left
+                    << setw(STT_WIDTH) << stt << "|"
+                    << setw(MAVE_WIDTH) << list[i].getTicketID() << "|"
+                    << setw(MASUAT_WIDTH) << list[i].getShowtime()->getShowID() << "|"
+                    << setw(IDFILM_WIDTH) << list[i].getShowtime()->getFilm()->getIDfilm() << "|"
+                    << setw(MAPHONG_WIDTH) << list[i].getShowtime()->getRoom()->getRoomID() << "|"
+                    << setw(CHAIRCOUNT_WIDTH) << list[i].getcount() << "|"
+                    << setw(NGAYGIO_WIDTH) << dateTime << "|"
+                    << right << setw(GIA_WIDTH) << fixed << setprecision(0) << totalPayment << left << "|"
+                    << endl;
+                ++stt;
+            }
+        } 
     }
 
     if (stt == 1) {

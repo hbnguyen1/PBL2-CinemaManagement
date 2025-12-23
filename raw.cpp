@@ -168,7 +168,7 @@ int main(){
                         cout<<"Nhan phim bat ky de tiep tuc..."; _getch();
                         break;
                     }
-                    case 2: MF.displayfilm(MST); MST.display(); cout<<"Nhan phim bat ky de tiep tuc..."; _getch(); break;
+                    case 2: /*MF.displayfilm(MST);*/ MST.display(); cout<<"Nhan phim bat ky de tiep tuc..."; _getch(); break;
                     case 3: {
                         int m; cout<<"Nhap thang: "; cin>>m; cin.ignore(numeric_limits<streamsize>::max(),'\n');
                         T.mostBookedFilmStatistics(m,MF);
@@ -206,8 +206,8 @@ int main(){
                         do{
                             string options[]={"Them suat chieu","Xoa suat chieu","Quay lai"};
                             sub = getMenuChoice(options,3);
-                            if(sub==1){MF.displayfilm(MST); MST.display(); MST.addShowtime(MF,MR); cout<<"Nhan phim bat ky de tiep tuc..."; _getch();}
-                            else if(sub==2){MF.displayfilm(MST); MST.display(); MST.deleteShowtime(); cout<<"Nhan phim bat ky de tiep tuc..."; _getch();}
+                            if(sub==1){MF.displayfilm(MST);/*** MST.display(); */ MST.addShowtime(MF,MR); cout<<"Nhan phim bat ky de tiep tuc..."; _getch();}
+                            else if(sub==2){/*MF.displayfilm(MST);*/ MST.display(); MST.deleteShowtime(); cout<<"Nhan phim bat ky de tiep tuc..."; _getch();}
                         }while(sub!=3);
                         break;
                     }
